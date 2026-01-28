@@ -54,17 +54,29 @@ button {
 </div>
 
 <script>
-// Sunet scurt beep
-const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-function playBeep(){
-    const o = audioContext.createOscillator();
-    const g = audioContext.createGain();
-    o.connect(g); g.connect(audioContext.destination);
-    o.type='sine';
-    o.frequency.value=440;
-    o.start(); o.stop(audioContext.currentTime+0.3);
-}
+// muzica reala
+const audio = new Audio("music.mp3");
 
+document.getElementById("yes").addEventListener("click", () => {
+    audio.loop = true; // sau false dacă vrei doar o dată
+    audio.play();
+    
+    // restul codului pentru inimioare și finalScreen rămâne la fel
+    const screen = document.getElementById("finalScreen");
+    screen.style.display = "flex";
+    setTimeout(()=>{screen.classList.add("active");},100);
+
+    setInterval(()=>{
+        const heart = document.createElement("div");
+        heart.className="heart";
+        heart.innerHTML="💖";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.fontSize=(Math.random()*30+20)+"px";
+        heart.style.animationDuration=(Math.random()*3+2)+"s";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),5000);
+    },300);
+});
 // DA click
 document.getElementById("yes").addEventListener("click", () => {
     playBeep(); // sunet scurt
