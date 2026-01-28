@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<title>Valentine Surprise</title>
+<style>
+body {
+    margin:0;
+    font-family:'Arial', sans-serif;
+    background:pink;
+    text-align:center;
+    overflow:hidden;
+}
+h1, p { color:white; }
+button {
+    padding: 15px 30px;
+    font-size: 20px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    margin:10px;
+    position:relative;
+}
+#yes { background:red; color:white; }
+#no { background:white; color:red; position:absolute; top:200px; left:200px; }
+.heart { position:fixed; top:-30px; font-size:24px; animation:fall linear infinite; }
+@keyframes fall { to { transform: translateY(110vh); } }
+#finalScreen {
+    position:fixed;
+    inset:0;
+    background: radial-gradient(circle,#ff69b4,#ff1493,#6a0036);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    opacity:0;
+    transition:opacity 1s;
+    z-index:999;
+}
+#finalScreen.active { opacity:1; }
+#finalScreen h1 { color:white; font-size:48px; }
+</style>
+</head>
+<body>
+
+<h1>💖 My Baby 💖</h1>
+<p>Do you wanna be my forever? 💕</p>
+
+<button id="yes">YES 💘</button>
+<button id="no">NO 😈</button>
+
+<div id="finalScreen">
+<h1>I would choose you<br>in every universe ✨💖</h1>
+</div>
+
+<script>
+// Sunet scurt beep
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+function playBeep(){
+    const o = audioContext.createOscillator();
+    const g = audioContext.createGain();
+    o.connect(g); g.connect(audioContext.destination);
+    o.type='sine';
+    o.frequency.value=440;
+    o.start(); o.stop(audioContext.currentTime+0.3);
+}
+
+// DA click
+document.getElementById("yes").addEventListener("click", () => {
+    playBeep(); // sunet scurt
+    // Arata ecran final fara sa stergem body
+    const screen = document.getElementById("finalScreen");
+    screen.style.display="flex";
+    setTimeout(()=>{screen.classList.add("active");},100);
+
+    // inimioare
+    setInterval(()=>{
+        const heart = document.createElement("div");
+        heart.className="heart";
+        heart.innerHTML="💖";
+        heart.style.left=Math.random()*100+"vw";
+        heart.style.fontSize=(Math.random()*30+20)+"px";
+        heart.style.animationDuration=(Math.random()*3+2)+"s";
+        document.body.appendChild(heart);
+        setTimeout(()=>heart.remove(),5000);
+    },300);
+});
+
+// NU fuge
+document.getElementById("no").addEventListener("mouseover", ()=>{
+    const noBtn = document.getElementById("no");
+    const x = Math.random()*(window.innerWidth-100);
+    const y = Math.random()*(window.innerHeight-50);
+    noBtn.style.left = x + "px";
+    noBtn.style.top = y + "px";
+});
+</script>
+
+</body>
+</html>
